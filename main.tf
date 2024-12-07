@@ -53,3 +53,16 @@ resource "pagerduty_user" "jacopen" {
   email = "jacopen@example.com"
 }
 
+locals {
+  users = [
+    { name = "jacopen", email = "jacopen@example.com" },
+    { name = "yusuke", email = "yusuke@example.com" },
+    { name = "kazuki", email = "kazuki@example.com" },
+  ]
+}
+
+resource "pagerduty_user" "user" {
+  for_each = { for u in local.users : u.name => u }
+  name  = each.value.name
+  email = each.value.email
+}
