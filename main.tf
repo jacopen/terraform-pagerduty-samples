@@ -66,3 +66,16 @@ resource "pagerduty_user" "user" {
   name  = each.value.name
   email = each.value.email
 }
+
+resource "pagerduty_service" "cart" {
+  name                    = "Cart Service"
+  auto_resolve_timeout    = 14400
+  acknowledgement_timeout = 600
+  escalation_policy       = pagerduty_escalation_policy.engineering.id
+}
+
+resource "pagerduty_service_integration" "cart_apiv2" {
+  name            = "API V2"
+  type            = "events_api_v2_inbound_integration"
+  service         = pagerduty_service.cart.id
+}
